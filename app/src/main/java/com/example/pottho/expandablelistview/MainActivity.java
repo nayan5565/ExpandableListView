@@ -3,8 +3,11 @@ package com.example.pottho.expandablelistview;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,18 +19,56 @@ public class MainActivity extends AppCompatActivity {
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
+    private ArrayList<String> selectedStrings ;
+    private Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        selectedStrings = new ArrayList<String>();
         // get the listview
         expListView = findViewById(R.id.lvExp);
+        btn = findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String checkedData = new Gson().toJson(selectedStrings);
+                Toast.makeText(
+                        getApplicationContext(),checkedData, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
 
         // preparing list data
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild) {
+            @Override
+            public void onClickItem(int groupPosition, int childPosition, View view) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        listDataHeader.get(groupPosition)
+                                + " : "
+                                + listDataChild.get(
+                                listDataHeader.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onCheckedItem(int groupPosition, int childPosition, boolean isChecked) {
+                if (isChecked) {
+                    selectedStrings.add(listDataChild.get(
+                            listDataHeader.get(groupPosition)).get(
+                            childPosition));
+                }else{
+                    selectedStrings.remove(listDataChild.get(
+                            listDataHeader.get(groupPosition)).get(
+                            childPosition));
+                }
+            }
+        };
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
