@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#f4f4f4" >
+    android:background="#f4f4f4">
+
+    <Button
+        android:id="@+id/btnExpandable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Another Expandable Activity" />
 
     <ExpandableListView
+
         android:id="@+id/lvExp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        android:layout_above="@id/btn"
+        android:layout_below="@id/btnExpandable" />
 
     <Button
         android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:text="Get"
-        android:textColor="@color/colorAccent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textColor="@color/colorAccent" />
 
-</LinearLayout>
+</RelativeLayout>

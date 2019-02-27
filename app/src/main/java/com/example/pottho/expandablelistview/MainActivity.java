@@ -1,12 +1,17 @@
 package com.example.pottho.expandablelistview;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.example.pottho.expandablelistview.model.DataItem;
+import com.example.pottho.expandablelistview.model.SubCategoryItem;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -17,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
-    private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
-    private ArrayList<String> selectedStrings ;
-    private Button btn;
+    private ArrayList<String> selectedStrings;
+    private Button btn, btnExpandable;
+    private ArrayList<DataItem> arCategory;
+    private ArrayList<SubCategoryItem> arSubCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,45 +34,60 @@ public class MainActivity extends AppCompatActivity {
         selectedStrings = new ArrayList<String>();
         // get the listview
         expListView = findViewById(R.id.lvExp);
+        btnExpandable = findViewById(R.id.btnExpandable);
+        btnExpandable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ExpandableActivityAnother.class);
+                startActivity(intent);
+            }
+        });
         btn = findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String checkedData = new Gson().toJson(selectedStrings);
                 Toast.makeText(
-                        getApplicationContext(),checkedData, Toast.LENGTH_SHORT)
+                        getApplicationContext(), checkedData, Toast.LENGTH_SHORT)
                         .show();
             }
         });
 
         // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild) {
+        setupReferences();
+        listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, int childPosition, View view) {
                 Toast.makeText(
                         getApplicationContext(),
-                        listDataHeader.get(groupPosition)
+                        arCategory.get(groupPosition).getCategoryName()
                                 + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
+                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
                         .show();
             }
 
             @Override
-            public void onCheckedItem(int groupPosition, int childPosition, boolean isChecked) {
+            public void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        arCategory.get(groupPosition).getCategoryName()
+                                + " : "
+                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
+                        .show();
                 if (isChecked) {
-                    selectedStrings.add(listDataChild.get(
-                            listDataHeader.get(groupPosition)).get(
-                            childPosition));
-                }else{
-                    selectedStrings.remove(listDataChild.get(
-                            listDataHeader.get(groupPosition)).get(
-                            childPosition));
+//                    buttonView.setChecked(true);
+//                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setIsChecked("yes");
+                    selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                } else {
+//                    buttonView.setChecked(true);
+//                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setIsChecked("no");
+                    selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                 }
+
+                listAdapter.notifyDataSetChanged();
             }
+
+
         };
 
         // setting list adapter
@@ -118,53 +138,70 @@ public class MainActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 Toast.makeText(
                         getApplicationContext(),
-                        listDataHeader.get(groupPosition)
+                        arCategory.get(groupPosition).getCategoryName()
                                 + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
+                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
                         .show();
                 return false;
             }
         });
     }
 
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+    private void setupReferences() {
 
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
+        arCategory = new ArrayList<>();
+        arSubCategory = new ArrayList<>();
 
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
+        DataItem dataItem = new DataItem();
+        dataItem.setCategoryId("1");
+        dataItem.setCategoryName("Top 250");
 
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
+        arSubCategory = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
 
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
+            SubCategoryItem subCategoryItem = new SubCategoryItem();
+            subCategoryItem.setCategoryId(String.valueOf(i));
+            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            subCategoryItem.setSubCategoryName("Top 250: " + i);
+            arSubCategory.add(subCategoryItem);
+        }
+        dataItem.setSubCategory(arSubCategory);
+        arCategory.add(dataItem);
 
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+        dataItem = new DataItem();
+        dataItem.setCategoryId("2");
+        dataItem.setCategoryName("Now Showing");
+        arSubCategory = new ArrayList<>();
+        for (int j = 1; j < 6; j++) {
+
+            SubCategoryItem subCategoryItem = new SubCategoryItem();
+            subCategoryItem.setCategoryId(String.valueOf(j));
+            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            subCategoryItem.setSubCategoryName("Now Showing: " + j);
+            arSubCategory.add(subCategoryItem);
+        }
+        dataItem.setSubCategory(arSubCategory);
+        arCategory.add(dataItem);
+
+        dataItem = new DataItem();
+        dataItem.setCategoryId("3");
+        dataItem.setCategoryName("Coming Soon..");
+        arSubCategory = new ArrayList<>();
+        for (int k = 1; k < 6; k++) {
+
+            SubCategoryItem subCategoryItem = new SubCategoryItem();
+            subCategoryItem.setCategoryId(String.valueOf(k));
+            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            subCategoryItem.setSubCategoryName("Coming Soon..: " + k);
+            arSubCategory.add(subCategoryItem);
+        }
+
+        dataItem.setSubCategory(arSubCategory);
+        arCategory.add(dataItem);
+
+
+        Log.e("TAG", "setupReferences: " + arCategory.size());
+
+
     }
 }

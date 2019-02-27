@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ExpandableActivityAnother" />
+        <activity android:name=".CheckedActivity" />
     </application>
 
 </manifest>
