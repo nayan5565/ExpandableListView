@@ -5,6 +5,15 @@ public class SubCategoryItem {
     private String subId;
     private String subCategoryName;
     private String isChecked;
+    private boolean isCheck;
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public String getCategoryId() {
         return categoryId;

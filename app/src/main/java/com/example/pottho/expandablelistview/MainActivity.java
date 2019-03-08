@@ -58,30 +58,37 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, int childPosition, View view) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        arCategory.get(groupPosition).getCategoryName()
-                                + " : "
-                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(
+//                        getApplicationContext(),
+//                        arCategory.get(groupPosition).getCategoryName()
+//                                + " : "
+//                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
+//                        .show();
             }
 
             @Override
             public void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        arCategory.get(groupPosition).getCategoryName()
-                                + " : "
-                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
-                        .show();
-                if (isChecked) {
-//                    buttonView.setChecked(true);
-//                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setIsChecked("yes");
+
+                if (buttonView.isChecked()) {
+                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
                     selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                    Toast.makeText(
+                            getApplicationContext(),
+                            arCategory.get(groupPosition).getCategoryName()
+                                    + " : "
+                                    + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
+                            .show();
+                    notifyDataSetChanged();
                 } else {
-//                    buttonView.setChecked(true);
-//                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setIsChecked("no");
+                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
                     selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                    Toast.makeText(
+                            getApplicationContext(),
+                            arCategory.get(groupPosition).getCategoryName()
+                                    + " : "
+                                    + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
+                            .show();
+                    notifyDataSetChanged();
                 }
 
                 listAdapter.notifyDataSetChanged();
@@ -130,21 +137,21 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         // Listview on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        getApplicationContext(),
-                        arCategory.get(groupPosition).getCategoryName()
-                                + " : "
-                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
-                        .show();
-                return false;
-            }
-        });
+//        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+//
+//            @Override
+//            public boolean onChildClick(ExpandableListView parent, View v,
+//                                        int groupPosition, int childPosition, long id) {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(
+//                        getApplicationContext(),
+//                        arCategory.get(groupPosition).getCategoryName()
+//                                + " : "
+//                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
+//                        .show();
+//                return false;
+//            }
+//        });
     }
 
     private void setupReferences() {
