@@ -26,7 +26,7 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
     private boolean isFromMyCategoriesFragment;
 
     public MyCategoriesExpandableListAdapter(Activity activity, ArrayList<HashMap<String, String>> parentItems,
-                                             ArrayList<ArrayList<HashMap<String, String>>> childItems, boolean isFromMyCategoriesFragment) {
+                                             ArrayList<ArrayList<HashMap<String, String>>> childItems,boolean isFromMyCategoriesFragment) {
 
         this.parentItems = parentItems;
         this.childItems = childItems;
@@ -76,9 +76,9 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
         final ViewHolderParent viewHolderParent;
         if (convertView == null) {
 
-            if (isFromMyCategoriesFragment) {
+            if(isFromMyCategoriesFragment) {
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-            } else {
+            }else {
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
             }
             viewHolderParent = new ViewHolderParent();
@@ -90,12 +90,7 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
         } else {
             viewHolderParent = (ViewHolderParent) convertView.getTag();
         }
-        viewHolderParent.cbMainCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onCheckedItem(buttonView, isChecked, groupPosition);
-            }
-        });
+
         if (parentItems.get(groupPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
             viewHolderParent.cbMainCategory.setChecked(true);
             notifyDataSetChanged();
@@ -105,30 +100,27 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
             notifyDataSetChanged();
         }
 
+        viewHolderParent.cbMainCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewHolderParent.cbMainCategory.isChecked()) {
+                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
 
-//        viewHolderParent.cbMainCategory.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                onClickItem(view);
-//
-//                if (viewHolderParent.cbMainCategory.isChecked()) {
-//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-//
-//                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
-//                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-//                    }
-//                    notifyDataSetChanged();
-//
-//                } else {
-//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-//                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
-//                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-//                    }
-//                    notifyDataSetChanged();
-//                }
-//            }
-//        });
+                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+                    }
+                    notifyDataSetChanged();
+
+                }
+                else {
+                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                    }
+                    notifyDataSetChanged();
+                }
+            }
+        });
 
         ConstantManager.childItems = childItems;
         ConstantManager.parentItems = parentItems;
@@ -137,9 +129,6 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
 
         return convertView;
     }
-
-    public abstract void onCheckedItem(CompoundButton buttonView, boolean isChecked, int groupPosition);
-//    public abstract void onClickItem(View view);
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, final boolean b, View convertView, ViewGroup viewGroup) {
@@ -159,13 +148,6 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
             viewHolderChild = (ViewHolderChild) convertView.getTag();
         }
 
-        viewHolderChild.cbSubCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onCheckedItem(buttonView,groupPosition,childPosition,isChecked);
-            }
-        });
-
         if (childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
             viewHolderChild.cbSubCategory.setChecked(true);
             notifyDataSetChanged();
@@ -175,48 +157,45 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
         }
 
         viewHolderChild.tvSubCategoryName.setText(child.get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
-//        viewHolderChild.cbSubCategory.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (viewHolderChild.cbSubCategory.isChecked()) {
-//                    count = 0;
-//                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-//                    notifyDataSetChanged();
-//                } else {
-//                    count = 0;
-//                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-//                    notifyDataSetChanged();
-//                }
-//
-//                for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
-//                    if (childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
-//                        count++;
-//                    }
-//                }
-//                if (count == childItems.get(groupPosition).size()) {
-//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-//                    notifyDataSetChanged();
-//                } else {
-//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-//                    notifyDataSetChanged();
-//                }
-//
-//
-//                ConstantManager.childItems = childItems;
-//                ConstantManager.parentItems = parentItems;
-//            }
-//        });
+        viewHolderChild.cbSubCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewHolderChild.cbSubCategory.isChecked()) {
+                    count = 0;
+                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+                    notifyDataSetChanged();
+                } else {
+                    count = 0;
+                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                    notifyDataSetChanged();
+                }
+
+                for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+                    if (childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+                        count++;
+                    }
+                }
+                if (count == childItems.get(groupPosition).size()) {
+                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+                    notifyDataSetChanged();
+                } else {
+                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                    notifyDataSetChanged();
+                }
+
+
+                ConstantManager.childItems = childItems;
+                ConstantManager.parentItems = parentItems;
+            }
+        });
 
         return convertView;
     }
-
-    public abstract void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked);
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return false;
     }
-
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);

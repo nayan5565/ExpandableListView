@@ -151,40 +151,40 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         ConstantManager.childItems = childItems;
 
         myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, false) {
-            @Override
-            public void onCheckedItem(CompoundButton buttonView, boolean isChecked, int groupPosition) {
-                if (buttonView.isChecked()) {
-                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+//            @Override
+//            public void onCheckedItem(CompoundButton buttonView, boolean isChecked, int groupPosition) {
+//                if (buttonView.isChecked()) {
+//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+//
+//                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+//                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+//                        seletecedItem.add(childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+//                    }
+//                    notifyDataSetChanged();
+//
+//                } else {
+//                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+//                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//                        seletecedItem.remove(childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+//                    }
+//                    notifyDataSetChanged();
+//                }
+//            }
 
-                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
-                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                        seletecedItem.add(childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
-                    }
-                    notifyDataSetChanged();
-
-                } else {
-                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                    for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
-                        childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                        seletecedItem.remove(childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
-                    }
-                    notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked) {
-                if (buttonView.isChecked()) {
-                    count = 0;
-                    seletecedItem.add(childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
-                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                    notifyDataSetChanged();
-                } else {
-                    count = 0;
-                    seletecedItem.remove(childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
-                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                    notifyDataSetChanged();
-                }
+//            @Override
+//            public void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked) {
+//                if (buttonView.isChecked()) {
+//                    count = 0;
+//                    seletecedItem.add(childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+//                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+//                    notifyDataSetChanged();
+//                } else {
+//                    count = 0;
+//                    seletecedItem.remove(childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+//                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//                    notifyDataSetChanged();
+//                }
 
 //                for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
 //                    if (childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
@@ -202,7 +202,7 @@ public class ExpandableActivityAnother extends AppCompatActivity {
 //
 //                ConstantManager.childItems = childItems;
 //                ConstantManager.parentItems = parentItems;
-            }
+//            }
         };
         lvCategory.setAdapter(myCategoriesExpandableListAdapter);
     }
