@@ -72,6 +72,8 @@ public class ExpandableActivityAnother extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(i));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Adventure: " + i);
+            subCategoryItem.setPhone("0167233001" + i);
+            subCategoryItem.setEmail("Adventure" + i + "gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -87,6 +89,8 @@ public class ExpandableActivityAnother extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(j));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Art: " + j);
+            subCategoryItem.setPhone("0191355596" + j);
+            subCategoryItem.setEmail("Art" + j + "gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -102,6 +106,9 @@ public class ExpandableActivityAnother extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(k));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Cooking: " + k);
+            subCategoryItem.setPhone("0171277881" + k);
+            subCategoryItem.setEmail("Cooking" + k + "gmail.com");
+
             arSubCategory.add(subCategoryItem);
         }
 
@@ -124,6 +131,8 @@ public class ExpandableActivityAnother extends AppCompatActivity {
                 HashMap<String, String> mapChild = new HashMap<String, String>();
                 mapChild.put(ConstantManager.Parameter.SUB_ID, subCategoryItem.getSubId());
                 mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME, subCategoryItem.getSubCategoryName());
+                mapChild.put(ConstantManager.Parameter.SUB_EMAIL, subCategoryItem.getEmail());
+                mapChild.put(ConstantManager.Parameter.SUB_PHONE, subCategoryItem.getPhone());
                 mapChild.put(ConstantManager.Parameter.CATEGORY_ID, subCategoryItem.getCategoryId());
                 mapChild.put(ConstantManager.Parameter.IS_CHECKED, subCategoryItem.getIsChecked());
 

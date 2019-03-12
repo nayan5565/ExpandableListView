@@ -2,10 +2,26 @@ package com.example.pottho.expandablelistview.model;
 
 public class SubCategoryItem {
     private String categoryId;
-    private String subId;
+    private String subId,email,phone;
     private String subCategoryName;
     private String isChecked;
     private boolean isCheck;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public boolean isCheck() {
         return isCheck;
