@@ -1,6 +1,7 @@
 package com.example.pottho.expandablelistview;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.example.pottho.expandablelistview.model.DataItem;
+import com.example.pottho.expandablelistview.model.MSelectedItem;
 import com.example.pottho.expandablelistview.model.SubCategoryItem;
 import com.google.gson.Gson;
 
@@ -28,6 +31,7 @@ public class ExpandableActivityAnother extends AppCompatActivity {
     private ArrayList<SubCategoryItem> arSubCategory;
     private ArrayList<ArrayList<SubCategoryItem>> arSubCategoryFinal;
     public static List<String> seletecedItem;
+    private List<MSelectedItem> mSelectedItems;
 
     private ArrayList<HashMap<String, String>> parentItems;
     private ArrayList<ArrayList<HashMap<String, String>>> childItems;
@@ -40,17 +44,60 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         setContentView(R.layout.activity_expandable);
 
         btn = findViewById(R.id.btn);
+        mSelectedItems = new ArrayList<>();
         seletecedItem = new ArrayList<>();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(ExpandableActivityAnother.this, CheckedActivity.class);
-                startActivity(intent);
+                Popup();
+//                Intent intent = new Intent(ExpandableActivityAnother.this, CheckedActivity.class);
+//                startActivity(intent);
             }
         });
 
         setupReferences();
+    }
+
+    private void getCheckedData() {
+        mSelectedItems.clear();
+        for (int i = 0; i < MyCategoriesExpandableListAdapter.parentItems.size(); i++) {
+
+            String isChecked = MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.IS_CHECKED);
+
+            if (isChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+//                tvParent.setText(tvParent.getText() + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME));
+            }
+
+            for (int j = 0; j < MyCategoriesExpandableListAdapter.childItems.get(i).size(); j++) {
+
+                String isChildChecked = MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.IS_CHECKED);
+
+                if (isChildChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+//                    tvChild.setText(tvChild.getText() + " , " + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME) + " " + (j + 1));
+
+                    MSelectedItem mSelectedItem = new MSelectedItem();
+                    mSelectedItem.setName(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+                    mSelectedItem.setEmail(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_EMAIL));
+                    mSelectedItem.setPhone(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_PHONE));
+                    mSelectedItems.add(mSelectedItem);
+                }
+
+            }
+
+        }
+
+
+    }
+
+    private void Popup() {
+        getCheckedData();
+        String checkedData = new Gson().toJson(mSelectedItems);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup);
+        TextView tvText = dialog.findViewById(R.id.tvText);
+        tvText.setText(checkedData);
+        dialog.show();
+
     }
 
     private void setupReferences() {
@@ -159,7 +206,7 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         ConstantManager.parentItems = parentItems;
         ConstantManager.childItems = childItems;
 
-        myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, false) {
+        myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, true) {
 //            @Override
 //            public void onCheckedItem(CompoundButton buttonView, boolean isChecked, int groupPosition) {
 //                if (buttonView.isChecked()) {
