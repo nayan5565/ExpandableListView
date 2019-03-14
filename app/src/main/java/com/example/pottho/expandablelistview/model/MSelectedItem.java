@@ -1,7 +1,23 @@
 package com.example.pottho.expandablelistview.model;
 
 public class MSelectedItem {
-    private String name,email,phone;
+    private String name,email,phone,startTime,endTime;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
     public String getName() {
         return name;

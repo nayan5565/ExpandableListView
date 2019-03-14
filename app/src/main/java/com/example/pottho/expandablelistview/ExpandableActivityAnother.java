@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -29,14 +30,14 @@ public class ExpandableActivityAnother extends AppCompatActivity {
 
     private ArrayList<DataItem> arCategory;
     private ArrayList<SubCategoryItem> arSubCategory;
-    private ArrayList<ArrayList<SubCategoryItem>> arSubCategoryFinal;
     public static List<String> seletecedItem;
-    private List<MSelectedItem> mSelectedItems;
+    private List<MSelectedItem> mSelectedItems, mSelectedItems2, mSelectedItems3;
 
     private ArrayList<HashMap<String, String>> parentItems;
     private ArrayList<ArrayList<HashMap<String, String>>> childItems;
     private MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
-    private int count = 0;
+    private String startIme = "", endTime = "";
+    private int groupPosition=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         setContentView(R.layout.activity_expandable);
 
         btn = findViewById(R.id.btn);
+        mSelectedItems3 = new ArrayList<>();
+        mSelectedItems2 = new ArrayList<>();
         mSelectedItems = new ArrayList<>();
         seletecedItem = new ArrayList<>();
         btn.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +57,17 @@ public class ExpandableActivityAnother extends AppCompatActivity {
 //                startActivity(intent);
             }
         });
+        setData();
 
         setupReferences();
+    }
+
+    private void setData() {
+        MSelectedItem mSelectedItem = new MSelectedItem();
+        mSelectedItem.setPhone("045453435");
+        mSelectedItem.setEmail("sa@gmail.com");
+        mSelectedItem.setName("nayan");
+        mSelectedItems2.add(mSelectedItem);
     }
 
     private void getCheckedData() {
@@ -79,6 +91,8 @@ public class ExpandableActivityAnother extends AppCompatActivity {
                     mSelectedItem.setName(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
                     mSelectedItem.setEmail(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_EMAIL));
                     mSelectedItem.setPhone(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_PHONE));
+                    mSelectedItem.setStartTime(startIme);
+                    mSelectedItem.setEndTime(endTime);
                     mSelectedItems.add(mSelectedItem);
                 }
 
@@ -91,11 +105,34 @@ public class ExpandableActivityAnother extends AppCompatActivity {
 
     private void Popup() {
         getCheckedData();
-        String checkedData = new Gson().toJson(mSelectedItems);
+        mSelectedItems3.clear();
+//        setData();
+        mSelectedItems.addAll(mSelectedItems2);
+        mSelectedItems3.addAll(mSelectedItems);
+        String checkedData = new Gson().toJson(mSelectedItems3);
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup);
         TextView tvText = dialog.findViewById(R.id.tvText);
         tvText.setText(checkedData);
+        dialog.show();
+
+    }
+
+    private void timePopup() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup2);
+        final EditText edtStartTime = dialog.findViewById(R.id.edtStartTime);
+        final EditText edtEndTime = dialog.findViewById(R.id.edtEndTime);
+        Button btnOk = dialog.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIme = edtStartTime.getText().toString();
+                endTime = edtEndTime.getText().toString();
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
 
     }
@@ -207,6 +244,10 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         ConstantManager.childItems = childItems;
 
         myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, true) {
+            @Override
+            public void onClickItem(int groupPosition, View view) {
+                timePopup();
+            }
 //            @Override
 //            public void onCheckedItem(CompoundButton buttonView, boolean isChecked, int groupPosition) {
 //                if (buttonView.isChecked()) {

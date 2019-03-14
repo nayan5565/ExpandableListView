@@ -26,7 +26,7 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
     private boolean isFromMyCategoriesFragment;
 
     public MyCategoriesExpandableListAdapter(Activity activity, ArrayList<HashMap<String, String>> parentItems,
-                                             ArrayList<ArrayList<HashMap<String, String>>> childItems,boolean isFromMyCategoriesFragment) {
+                                             ArrayList<ArrayList<HashMap<String, String>>> childItems, boolean isFromMyCategoriesFragment) {
 
         this.parentItems = parentItems;
         this.childItems = childItems;
@@ -76,9 +76,9 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
         final ViewHolderParent viewHolderParent;
         if (convertView == null) {
 
-            if(isFromMyCategoriesFragment) {
+            if (isFromMyCategoriesFragment) {
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-            }else {
+            } else {
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
             }
             viewHolderParent = new ViewHolderParent();
@@ -111,8 +111,7 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
                     }
                     notifyDataSetChanged();
 
-                }
-                else {
+                } else {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
@@ -126,9 +125,16 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
         ConstantManager.parentItems = parentItems;
 
         viewHolderParent.tvMainCategoryName.setText(parentItems.get(groupPosition).get(ConstantManager.Parameter.CATEGORY_NAME));
-
+        viewHolderParent.tvMainCategoryName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickItem(groupPosition, v);
+            }
+        });
         return convertView;
     }
+
+    public abstract void onClickItem(int groupPosition, View view);
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, final boolean b, View convertView, ViewGroup viewGroup) {
@@ -196,6 +202,7 @@ public abstract class MyCategoriesExpandableListAdapter extends BaseExpandableLi
     public boolean isChildSelectable(int i, int i1) {
         return false;
     }
+
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
