@@ -94,7 +94,7 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         viewHolderChild.cbSubCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onCheckedItem(buttonView, groupPosition, childPosition, isChecked);
+//                onCheckedItem(buttonView, groupPosition, childPosition, isChecked);
             }
         });
 
