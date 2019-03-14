@@ -72,7 +72,7 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final ViewHolderChild viewHolderChild;
-        final SubCategoryItem childText =_listDataHeader.get(groupPosition).getSubCategory().get(childPosition);
+        final SubCategoryItem childText = _listDataHeader.get(groupPosition).getSubCategory().get(childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -112,24 +112,17 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickItem(groupPosition, childPosition, view);
+//                onClickItem(groupPosition, childPosition, view);
             }
         });
         return convertView;
     }
 
-    public abstract void onClickItem(int groupPosition, int childPosition, View view);
-
-
-
-
-
-
-
+    public abstract void onClickItem(int groupPosition, View view);
 
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
+    public View getGroupView(final int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         DataItem headerTitle = (DataItem) getGroup(groupPosition);
 
@@ -144,9 +137,15 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle.getCategoryName());
 
+        lblListHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickItem(groupPosition, v);
+            }
+        });
+
         return convertView;
     }
-
 
 
 //    @Override
@@ -158,6 +157,7 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int i, int i1) {
         return false;
     }
+
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
@@ -167,7 +167,9 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
     public void onGroupExpanded(int groupPosition) {
         super.onGroupExpanded(groupPosition);
     }
+
     public abstract void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked);
+
     private class ViewHolderChild {
 
         TextView tvSubCategoryName;

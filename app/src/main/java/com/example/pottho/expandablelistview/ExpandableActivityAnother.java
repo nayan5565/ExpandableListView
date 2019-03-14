@@ -1,20 +1,17 @@
 package com.example.pottho.expandablelistview;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.example.pottho.expandablelistview.model.DataItem;
+import com.example.pottho.expandablelistview.model.MPselecteItem;
 import com.example.pottho.expandablelistview.model.MSelectedItem;
 import com.example.pottho.expandablelistview.model.SubCategoryItem;
 import com.google.gson.Gson;
@@ -31,13 +28,14 @@ public class ExpandableActivityAnother extends AppCompatActivity {
     private ArrayList<DataItem> arCategory;
     private ArrayList<SubCategoryItem> arSubCategory;
     public static List<String> seletecedItem;
+    public static List<MPselecteItem> mPselecteItems;
     private List<MSelectedItem> mSelectedItems, mSelectedItems2, mSelectedItems3;
 
     private ArrayList<HashMap<String, String>> parentItems;
     private ArrayList<ArrayList<HashMap<String, String>>> childItems;
     private MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
     private String startIme = "", endTime = "";
-    private int groupPosition=0;
+    private int groupPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +85,16 @@ public class ExpandableActivityAnother extends AppCompatActivity {
                 if (isChildChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
 //                    tvChild.setText(tvChild.getText() + " , " + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME) + " " + (j + 1));
 
+//                    MPselecteItem mPselecteItem = new MPselecteItem();
+//                    mPselecteItem.setSelectedItems(groupPosition).setStartTime(startIme);
+//                    mPselecteItem.getSelectedItems().get(groupPosition).setEndTime(endTime);
+//                    mPselecteItem.getSelectedItems().get(groupPosition).setName(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
+//                    mPselecteItem.getSelectedItems().get(groupPosition).setEmail(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_EMAIL));
+//                    mPselecteItem.getSelectedItems().get(groupPosition).setPhone(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_PHONE));
+//                    mPselecteItem.setSelectedItems(mPselecteItem.getSelectedItems());
+//                    mPselecteItems.add(mPselecteItem);
+
+
                     MSelectedItem mSelectedItem = new MSelectedItem();
                     mSelectedItem.setName(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
                     mSelectedItem.setEmail(MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.SUB_EMAIL));
@@ -107,6 +115,7 @@ public class ExpandableActivityAnother extends AppCompatActivity {
         getCheckedData();
         mSelectedItems3.clear();
 //        setData();
+//        mSelectedItems.addAll(mPselecteItems.get(groupPosition).getSelectedItems());
         mSelectedItems.addAll(mSelectedItems2);
         mSelectedItems3.addAll(mSelectedItems);
         String checkedData = new Gson().toJson(mSelectedItems3);

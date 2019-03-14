@@ -1,13 +1,18 @@
 package com.example.pottho.expandablelistview;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pottho.expandablelistview.model.DataItem;
@@ -57,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setupReferences();
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
-            public void onClickItem(int groupPosition, int childPosition, View view) {
+            public void onClickItem(int groupPosition, View view) {
+                childPopup(groupPosition);
 //                Toast.makeText(
 //                        getApplicationContext(),
 //                        arCategory.get(groupPosition).getCategoryName()
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                     + " : "
                                     + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
                             .show();
-                    notifyDataSetChanged();
+//                    notifyDataSetChanged();
                 } else {
                     arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
                     selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
@@ -88,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
                                     + " : "
                                     + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
                             .show();
-                    notifyDataSetChanged();
+//                    notifyDataSetChanged();
                 }
 
-                listAdapter.notifyDataSetChanged();
+//                listAdapter.notifyDataSetChanged();
             }
 
 
@@ -209,6 +215,51 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e("TAG", "setupReferences: " + arCategory.size());
 
+
+    }
+
+    private void childPopup(final int pos) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.child_popup);
+
+        RecyclerView rvSub = dialog.findViewById(R.id.rvSub);
+        rvSub.setLayoutManager(new LinearLayoutManager(this));
+        TextView tvParent = dialog.findViewById(R.id.tvParent);
+
+        AdChildItem adChildItem = new AdChildItem(this) {
+            @Override
+            public void onClickItem(int itemPosition, View view) {
+                if (arCategory.get(pos).getSubCategory().get(itemPosition).isCheck()) {
+                    arCategory.get(pos).getSubCategory().get(itemPosition).setCheck(false);
+                    selectedStrings.remove(arCategory.get(pos).getSubCategory().get(itemPosition).getSubCategoryName());
+                    Toast.makeText(MainActivity.this, "Removed: " + arCategory.get(pos).getSubCategory().get(itemPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    arCategory.get(pos).getSubCategory().get(itemPosition).setCheck(true);
+                    selectedStrings.add(arCategory.get(pos).getSubCategory().get(itemPosition).getSubCategoryName());
+                    Toast.makeText(MainActivity.this, "Added: " + arCategory.get(pos).getSubCategory().get(itemPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+
+        };
+        rvSub.setAdapter(adChildItem);
+        Log.e("ChildItem", "size: " + arCategory.get(pos).getSubCategory().size());
+        if (arCategory.get(pos).getSubCategory().size() > 0) {
+            adChildItem.addData(arCategory.get(pos).getSubCategory());
+            tvParent.setText(arCategory.get(pos).getCategoryName());
+        }
+
+        Button btnOk = dialog.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
 
     }
 }
