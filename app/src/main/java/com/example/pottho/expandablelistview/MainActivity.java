@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pottho.expandablelistview.model.DataItem;
+import com.example.pottho.expandablelistview.model.MSelectedItem;
 import com.example.pottho.expandablelistview.model.SubCategoryItem;
 import com.google.gson.Gson;
 
@@ -31,12 +32,18 @@ public class MainActivity extends AppCompatActivity {
     private Button btn, btnExpandable;
     private ArrayList<DataItem> arCategory;
     private ArrayList<SubCategoryItem> arSubCategory;
+    private String startIme = "", endTime = "";
+    private List<MSelectedItem> mSelectedItems, mSelectedItems2, mSelectedItems3;
+    private int indexPos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         selectedStrings = new ArrayList<String>();
+        mSelectedItems3 = new ArrayList<>();
+        mSelectedItems2 = new ArrayList<>();
+        mSelectedItems = new ArrayList<>();
         // get the listview
         expListView = findViewById(R.id.lvExp);
         btnExpandable = findViewById(R.id.btnExpandable);
@@ -51,10 +58,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String checkedData = new Gson().toJson(selectedStrings);
-                Toast.makeText(
-                        getApplicationContext(), checkedData, Toast.LENGTH_SHORT)
-                        .show();
+                Popup();
             }
         });
 
@@ -63,13 +67,38 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, View view) {
-                childPopup(groupPosition);
+//                childPopup(groupPosition);
 //                Toast.makeText(
 //                        getApplicationContext(),
 //                        arCategory.get(groupPosition).getCategoryName()
 //                                + " : "
 //                                + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
 //                        .show();
+            }
+
+            @Override
+            public void onClickItem(int groupPosition, int childPosition, View view) {
+                if (arCategory.get(groupPosition).getSubCategory().get(childPosition).isCheck()) {
+
+                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
+                    selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                    if (isPhone(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName())) {
+                        mSelectedItems.remove(indexPos);
+                    }
+
+                    Toast.makeText(MainActivity.this, "Removed: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    MSelectedItem mSelectedItem = new MSelectedItem();
+                    mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                    mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(childPosition).getEmail());
+                    mSelectedItem.setPhone(arCategory.get(groupPosition).getSubCategory().get(childPosition).getPhone());
+                    mSelectedItem.setStartTime(startIme);
+                    mSelectedItem.setEndTime(endTime);
+                    mSelectedItems.add(mSelectedItem);
+                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
+                    selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
+                    Toast.makeText(MainActivity.this, "Added: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -158,6 +187,46 @@ public class MainActivity extends AppCompatActivity {
 //                return false;
 //            }
 //        });
+    }
+
+    private boolean isPhone(String phone) {
+        for (int i = 0; i < mSelectedItems.size(); i++) {
+            if (phone.equals(mSelectedItems.get(i).getName())) {
+                indexPos = i;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void timePopup() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup2);
+        final EditText edtStartTime = dialog.findViewById(R.id.edtStartTime);
+        final EditText edtEndTime = dialog.findViewById(R.id.edtEndTime);
+        Button btnOk = dialog.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIme = edtStartTime.getText().toString();
+                endTime = edtEndTime.getText().toString();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private void Popup() {
+        String checkedData = new Gson().toJson(mSelectedItems);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup);
+        TextView tvText = dialog.findViewById(R.id.tvText);
+        tvText.setText(checkedData);
+        dialog.show();
+
     }
 
     private void setupReferences() {

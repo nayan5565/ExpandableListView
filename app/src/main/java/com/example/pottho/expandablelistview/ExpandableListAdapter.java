@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,10 +92,10 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
 //        CheckBox cb = convertView.findViewById(R.id.cb);
 //        TextView txtListChild = convertView
 //                .findViewById(R.id.lblListItem);
-        viewHolderChild.cbSubCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        viewHolderChild.cbSubCategory.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                onCheckedItem(buttonView, groupPosition, childPosition, isChecked);
+            public void onClick(View v) {
+                onClickItem(groupPosition, childPosition, v);
             }
         });
 
@@ -120,6 +121,8 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public abstract void onClickItem(int groupPosition, View view);
 
+    public abstract void onClickItem(int groupPosition, int childPosition, View view);
+
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded,
@@ -129,15 +132,18 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
+            convertView = infalInflater.inflate(R.layout.group_list_layout_my_categories, null);
         }
+        TextView tvMainCategoryName = convertView.findViewById(R.id.tvMainCategoryName);
+        CheckBox cbMainCategory = convertView.findViewById(R.id.cbMainCategory);
+        cbMainCategory.setVisibility(View.GONE);
+        ImageView ivCategory = convertView.findViewById(R.id.ivCategory);
+//        TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
 
-        TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
+        tvMainCategoryName.setTypeface(null, Typeface.BOLD);
+        tvMainCategoryName.setText(headerTitle.getCategoryName());
 
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle.getCategoryName());
-
-        lblListHeader.setOnClickListener(new View.OnClickListener() {
+        tvMainCategoryName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickItem(groupPosition, v);

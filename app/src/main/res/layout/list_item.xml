@@ -7,7 +7,9 @@
         android:id="@+id/cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_marginStart="10dp"
+        android:button="@drawable/custom_checkbox_theme"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/lblListItem"
