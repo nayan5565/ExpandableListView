@@ -159,13 +159,9 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 
         if (headerTitle.isCheck()) {
-            for (int i = 0; i < headerTitle.getSubCategory().size(); i++) {
-                headerTitle.getSubCategory().get(i).setCheck(true);
-            }
+            cbMainCategory.setChecked(true);
         } else {
-            for (int i = 0; i < headerTitle.getSubCategory().size(); i++) {
-                headerTitle.getSubCategory().get(i).setCheck(false);
-            }
+            cbMainCategory.setChecked(false);
         }
 
         return convertView;
@@ -192,7 +188,6 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         super.onGroupExpanded(groupPosition);
     }
 
-    public abstract void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked);
 
     private class ViewHolderChild {
 

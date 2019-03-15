@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<SubCategoryItem> arSubCategory;
     private String startIme = "", endTime = "";
     private List<MSelectedItem> mSelectedItems, mSelectedItems2, mSelectedItems3;
-    private int indexPos = 0;
+    private int indexPos = 0, count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +74,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.cbMainCategory:
                         if (!arCategory.get(groupPosition).isCheck()) {
                             arCategory.get(groupPosition).setCheck(true);
+                            for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
+                                arCategory.get(groupPosition).getSubCategory().get(i).setCheck(true);
+                            }
                             notifyDataSetChanged();
                         } else {
                             arCategory.get(groupPosition).setCheck(false);
+                            for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
+                                arCategory.get(groupPosition).getSubCategory().get(i).setCheck(false);
+                            }
                             notifyDataSetChanged();
                         }
                         break;
@@ -97,16 +103,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(int groupPosition, int childPosition, View view) {
                 if (arCategory.get(groupPosition).getSubCategory().get(childPosition).isCheck()) {
-
+                    count = 0;
                     arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
                     selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                     if (isPhone(arCategory.get(groupPosition).getSubCategory().get(childPosition).getPhone())) {
                         Toast.makeText(MainActivity.this, "Removed: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getPhone(), Toast.LENGTH_SHORT).show();
                         mSelectedItems.remove(indexPos);
                     }
-
+                    notifyDataSetChanged();
 
                 } else {
+                    count = 0;
                     MSelectedItem mSelectedItem = new MSelectedItem();
                     mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                     mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(childPosition).getEmail());
@@ -115,40 +122,32 @@ public class MainActivity extends AppCompatActivity {
                     mSelectedItem.setEndTime(endTime);
                     mSelectedItems.add(mSelectedItem);
                     arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
+
                     selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                     Toast.makeText(MainActivity.this, "Added: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                 }
-            }
 
-            @Override
-            public void onCheckedItem(CompoundButton buttonView, int groupPosition, int childPosition, boolean isChecked) {
 
-                if (buttonView.isChecked()) {
-                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
-                    selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
-                    Toast.makeText(
-                            getApplicationContext(),
-                            arCategory.get(groupPosition).getCategoryName()
-                                    + " : "
-                                    + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
-                            .show();
-//                    notifyDataSetChanged();
+
+
+                for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
+                    if (arCategory.get(groupPosition).getSubCategory().get(i).isCheck()) {
+                        count++;
+                    }
+                }
+                // and if  checked of all child item then checked parent item
+                // if  unChecked of minimum one item child list then unChecked of parent item
+                if (count == arCategory.get(groupPosition).getSubCategory().size()) {
+                    arCategory.get(groupPosition).setCheck(true);
+                    listAdapter.notifyDataSetChanged();
                 } else {
-                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
-                    selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
-                    Toast.makeText(
-                            getApplicationContext(),
-                            arCategory.get(groupPosition).getCategoryName()
-                                    + " : "
-                                    + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT)
-                            .show();
-//                    notifyDataSetChanged();
+                    arCategory.get(groupPosition).setCheck(false);
+                    listAdapter.notifyDataSetChanged();
                 }
 
-//                listAdapter.notifyDataSetChanged();
+                //End UnChecked condition of parent item
             }
-
-
         };
 
         // setting list adapter
