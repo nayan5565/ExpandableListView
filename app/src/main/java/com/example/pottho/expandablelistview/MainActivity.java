@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         mSelectedItems3 = new ArrayList<>();
         mSelectedItems2 = new ArrayList<>();
         mSelectedItems = new ArrayList<>();
+
+        setData();
         // get the listview
         expListView = findViewById(R.id.lvExp);
         btnExpandable = findViewById(R.id.btnExpandable);
@@ -201,6 +203,14 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private void setData() {
+        MSelectedItem mSelectedItem = new MSelectedItem();
+        mSelectedItem.setPhone("01913555965");
+        mSelectedItem.setEmail("nayan@gmail.com");
+        mSelectedItem.setName("nayan");
+        mSelectedItems2.add(mSelectedItem);
+    }
+
     private void timePopup() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup2);
@@ -221,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Popup() {
+//        mSelectedItems3.clear();
+        mSelectedItems.addAll(mSelectedItems2);
+//        mSelectedItems3.addAll(mSelectedItems);
         String checkedData = new Gson().toJson(mSelectedItems);
+        mSelectedItems.clear();
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup);
         TextView tvText = dialog.findViewById(R.id.tvText);
