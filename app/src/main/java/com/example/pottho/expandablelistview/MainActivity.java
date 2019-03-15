@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, View view) {
-//                childPopup(groupPosition);
+                timePopup();
 //                Toast.makeText(
 //                        getApplicationContext(),
 //                        arCategory.get(groupPosition).getCategoryName()
@@ -82,11 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
                     arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(false);
                     selectedStrings.remove(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
-                    if (isPhone(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName())) {
+                    if (isPhone(arCategory.get(groupPosition).getSubCategory().get(childPosition).getPhone())) {
+                        Toast.makeText(MainActivity.this, "Removed: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getPhone(), Toast.LENGTH_SHORT).show();
                         mSelectedItems.remove(indexPos);
                     }
 
-                    Toast.makeText(MainActivity.this, "Removed: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
+
                 } else {
                     MSelectedItem mSelectedItem = new MSelectedItem();
                     mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isPhone(String phone) {
         for (int i = 0; i < mSelectedItems.size(); i++) {
-            if (phone.equals(mSelectedItems.get(i).getName())) {
+            if (phone.equals(mSelectedItems.get(i).getPhone())) {
                 indexPos = i;
                 return true;
             }
@@ -245,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(i));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Top 250: " + i);
+            subCategoryItem.setPhone("0167233001" + i);
+            subCategoryItem.setEmail("Top 250" + i + "gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -260,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(j));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Now Showing: " + j);
+            subCategoryItem.setPhone("0197233001" + j);
+            subCategoryItem.setEmail("Now Showing" + j + "gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -275,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
             subCategoryItem.setCategoryId(String.valueOf(k));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Coming Soon..: " + k);
+            subCategoryItem.setPhone("0177233001" + k);
+            subCategoryItem.setEmail("Coming Soon.." + k + "gmail.com");
             arSubCategory.add(subCategoryItem);
         }
 

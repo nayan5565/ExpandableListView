@@ -138,12 +138,13 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         CheckBox cbMainCategory = convertView.findViewById(R.id.cbMainCategory);
         cbMainCategory.setVisibility(View.GONE);
         ImageView ivCategory = convertView.findViewById(R.id.ivCategory);
+        ImageView imgTime = convertView.findViewById(R.id.imgTime);
 //        TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
 
         tvMainCategoryName.setTypeface(null, Typeface.BOLD);
         tvMainCategoryName.setText(headerTitle.getCategoryName());
 
-        tvMainCategoryName.setOnClickListener(new View.OnClickListener() {
+        imgTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickItem(groupPosition, v);
