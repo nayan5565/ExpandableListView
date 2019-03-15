@@ -7,6 +7,15 @@ public class DataItem {
     private String categoryName;
     private String isChecked = "NO";
     private List<SubCategoryItem> subCategory;
+    private boolean isCheck;
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public DataItem() {
     }

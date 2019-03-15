@@ -136,7 +136,7 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         TextView tvMainCategoryName = convertView.findViewById(R.id.tvMainCategoryName);
         CheckBox cbMainCategory = convertView.findViewById(R.id.cbMainCategory);
-        cbMainCategory.setVisibility(View.GONE);
+        cbMainCategory.setVisibility(View.VISIBLE);
         ImageView ivCategory = convertView.findViewById(R.id.ivCategory);
         ImageView imgTime = convertView.findViewById(R.id.imgTime);
 //        TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
@@ -144,12 +144,29 @@ public abstract class ExpandableListAdapter extends BaseExpandableListAdapter {
         tvMainCategoryName.setTypeface(null, Typeface.BOLD);
         tvMainCategoryName.setText(headerTitle.getCategoryName());
 
+        cbMainCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickItem(groupPosition, v);
+            }
+        });
         imgTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickItem(groupPosition, v);
             }
         });
+
+
+        if (headerTitle.isCheck()) {
+            for (int i = 0; i < headerTitle.getSubCategory().size(); i++) {
+                headerTitle.getSubCategory().get(i).setCheck(true);
+            }
+        } else {
+            for (int i = 0; i < headerTitle.getSubCategory().size(); i++) {
+                headerTitle.getSubCategory().get(i).setCheck(false);
+            }
+        }
 
         return convertView;
     }

@@ -69,7 +69,23 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, View view) {
-                timePopup();
+
+                switch (view.getId()) {
+                    case R.id.cbMainCategory:
+                        if (!arCategory.get(groupPosition).isCheck()) {
+                            arCategory.get(groupPosition).setCheck(true);
+                            notifyDataSetChanged();
+                        } else {
+                            arCategory.get(groupPosition).setCheck(false);
+                            notifyDataSetChanged();
+                        }
+                        break;
+
+                    case R.id.imgTime:
+                        timePopup();
+                        break;
+                }
+
 //                Toast.makeText(
 //                        getApplicationContext(),
 //                        arCategory.get(groupPosition).getCategoryName()
