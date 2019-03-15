@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
                             arCategory.get(groupPosition).setCheck(true);
                             for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
                                 arCategory.get(groupPosition).getSubCategory().get(i).setCheck(true);
+                                MSelectedItem mSelectedItem = new MSelectedItem();
+                                mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(i).getSubCategoryName());
+                                mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(i).getEmail());
+                                mSelectedItem.setPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone());
+                                mSelectedItem.setStartTime(startIme);
+                                mSelectedItem.setEndTime(endTime);
+                                mSelectedItems.add(mSelectedItem);
                             }
                             notifyDataSetChanged();
                         } else {
@@ -114,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     count = 0;
+                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
                     MSelectedItem mSelectedItem = new MSelectedItem();
                     mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                     mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(childPosition).getEmail());
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     mSelectedItem.setStartTime(startIme);
                     mSelectedItem.setEndTime(endTime);
                     mSelectedItems.add(mSelectedItem);
-                    arCategory.get(groupPosition).getSubCategory().get(childPosition).setCheck(true);
+
 
                     selectedStrings.add(arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName());
                     Toast.makeText(MainActivity.this, "Added: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
@@ -247,10 +255,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void Popup() {
 //        mSelectedItems3.clear();
-        mSelectedItems.addAll(mSelectedItems2);
+//        mSelectedItems.addAll(mSelectedItems2);
 //        mSelectedItems3.addAll(mSelectedItems);
         String checkedData = new Gson().toJson(mSelectedItems);
-        mSelectedItems.clear();
+//        mSelectedItems.clear();
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup);
         TextView tvText = dialog.findViewById(R.id.tvText);
@@ -269,14 +277,14 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryName("Top 250");
 
         arSubCategory = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < 4; i++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(i));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Top 250: " + i);
             subCategoryItem.setPhone("0167233001" + i);
-            subCategoryItem.setEmail("Top 250" + i + "gmail.com");
+            subCategoryItem.setEmail("Top 250" + i + "@gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -286,14 +294,14 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryId("2");
         dataItem.setCategoryName("Now Showing");
         arSubCategory = new ArrayList<>();
-        for (int j = 1; j < 6; j++) {
+        for (int j = 1; j < 4; j++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(j));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Now Showing: " + j);
             subCategoryItem.setPhone("0197233001" + j);
-            subCategoryItem.setEmail("Now Showing" + j + "gmail.com");
+            subCategoryItem.setEmail("Now Showing" + j + "@gmail.com");
             arSubCategory.add(subCategoryItem);
         }
         dataItem.setSubCategory(arSubCategory);
@@ -303,14 +311,14 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryId("3");
         dataItem.setCategoryName("Coming Soon..");
         arSubCategory = new ArrayList<>();
-        for (int k = 1; k < 6; k++) {
+        for (int k = 1; k < 4; k++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
             subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             subCategoryItem.setSubCategoryName("Coming Soon..: " + k);
             subCategoryItem.setPhone("0177233001" + k);
-            subCategoryItem.setEmail("Coming Soon.." + k + "gmail.com");
+            subCategoryItem.setEmail("Coming Soon.." + k + "@gmail.com");
             arSubCategory.add(subCategoryItem);
         }
 
