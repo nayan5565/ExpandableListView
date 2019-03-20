@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                             }
-                            notifyDataSetChanged();
+
                         } else {
                             arCategory.get(groupPosition).setCheck(false);
                             for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
@@ -110,12 +110,12 @@ public class MainActivity extends AppCompatActivity {
 //                                    }
 //                                }
                             }
-                            notifyDataSetChanged();
                         }
+                        notifyDataSetChanged();
                         break;
 
                     case R.id.imgTime:
-                        timePopup();
+                        timePopup(groupPosition);
                         break;
                 }
 
@@ -252,11 +252,13 @@ public class MainActivity extends AppCompatActivity {
         mSelectedItems2.add(mSelectedItem);
     }
 
-    private void timePopup() {
+    private void timePopup(int pos) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup2);
         final EditText edtStartTime = dialog.findViewById(R.id.edtStartTime);
         final EditText edtEndTime = dialog.findViewById(R.id.edtEndTime);
+        final TextView tvName = dialog.findViewById(R.id.tvName);
+        tvName.setText(arCategory.get(pos).getCategoryName());
         Button btnOk = dialog.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
