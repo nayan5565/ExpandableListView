@@ -10,13 +10,43 @@
         android:layout_height="wrap_content"
         android:text="Another Expandable Activity" />
 
-    <ExpandableListView
-
-        android:id="@+id/lvExp"
+    <ScrollView
+        android:id="@+id/activity_expandable_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/btn"
-        android:layout_below="@id/btnExpandable" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnExpandable"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Group List: " />
+
+            <ExpandableListView
+                android:id="@+id/lvExp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Single List: " />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <Button
         android:id="@+id/btn"

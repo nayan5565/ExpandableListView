@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private String startIme = "", endTime = "";
     private List<MSelectedItem> mSelectedItems, mSelectedItems2, mSelectedItems3;
     private int indexPos = 0, count = 0;
+    private AdRecyclerView adRecyclerView;
+    private RecyclerView rvSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         mSelectedItems3 = new ArrayList<>();
         mSelectedItems2 = new ArrayList<>();
         mSelectedItems = new ArrayList<>();
+        adRecyclerView = new AdRecyclerView(this);
+        rvSub = findViewById(R.id.rvSub);
+        rvSub.setLayoutManager(new LinearLayoutManager(this));
+        rvSub.setAdapter(adRecyclerView);
+
 
         setData();
         // get the listview
@@ -66,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         // preparing list data
         setupReferences();
+        adRecyclerView.addData(arCategory.get(0).getSubCategory());
         listAdapter = new ExpandableListAdapter(this, arCategory) {
             @Override
             public void onClickItem(int groupPosition, View view) {
@@ -76,19 +85,30 @@ public class MainActivity extends AppCompatActivity {
                             arCategory.get(groupPosition).setCheck(true);
                             for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
                                 arCategory.get(groupPosition).getSubCategory().get(i).setCheck(true);
-                                MSelectedItem mSelectedItem = new MSelectedItem();
-                                mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(i).getSubCategoryName());
-                                mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(i).getEmail());
-                                mSelectedItem.setPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone());
-                                mSelectedItem.setStartTime(startIme);
-                                mSelectedItem.setEndTime(endTime);
-                                mSelectedItems.add(mSelectedItem);
+                                if (!isPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone())) {
+                                    MSelectedItem mSelectedItem = new MSelectedItem();
+                                    mSelectedItem.setName(arCategory.get(groupPosition).getSubCategory().get(i).getSubCategoryName());
+                                    mSelectedItem.setEmail(arCategory.get(groupPosition).getSubCategory().get(i).getEmail());
+                                    mSelectedItem.setPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone());
+                                    mSelectedItem.setStartTime(startIme);
+                                    mSelectedItem.setEndTime(endTime);
+                                    mSelectedItems.add(mSelectedItem);
+                                }
+
                             }
                             notifyDataSetChanged();
                         } else {
                             arCategory.get(groupPosition).setCheck(false);
                             for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
                                 arCategory.get(groupPosition).getSubCategory().get(i).setCheck(false);
+                                if (isPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone())) {
+                                    mSelectedItems.remove(indexPos);
+                                }
+//                                for (int j = 0; j < mSelectedItems.size(); j++) {
+//                                    if (isPhone(arCategory.get(groupPosition).getSubCategory().get(i).getPhone())) {
+//                                        mSelectedItems.remove(indexPos);
+//                                    }
+//                                }
                             }
                             notifyDataSetChanged();
                         }
@@ -135,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Added: " + arCategory.get(groupPosition).getSubCategory().get(childPosition).getSubCategoryName(), Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
                 }
-
-
 
 
                 for (int i = 0; i < arCategory.get(groupPosition).getSubCategory().size(); i++) {
@@ -277,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryName("Top 250");
 
         arSubCategory = new ArrayList<>();
-        for (int i = 1; i < 4; i++) {
+        for (int i = 2; i < 4; i++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(i));
@@ -294,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryId("2");
         dataItem.setCategoryName("Now Showing");
         arSubCategory = new ArrayList<>();
-        for (int j = 1; j < 4; j++) {
+        for (int j = 2; j < 4; j++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(j));
@@ -311,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         dataItem.setCategoryId("3");
         dataItem.setCategoryName("Coming Soon..");
         arSubCategory = new ArrayList<>();
-        for (int k = 1; k < 4; k++) {
+        for (int k = 2; k < 4; k++) {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
